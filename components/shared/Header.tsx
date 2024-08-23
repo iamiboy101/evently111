@@ -2,7 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { NAV_LINKS } from "@/constants";
 import { Button } from "../ui/button";
-import { auth } from "@/auth";
+import { auth, signIn } from "@/auth";
+import UserButton from "./UserButton";
+import MobileNav from "./MobileNav";
+
 
 const Header = async() => {
      const session = await auth()
@@ -31,13 +34,26 @@ const Header = async() => {
           ))}
         </ul>
         <div className="flex w-32 justify-end gap-3">
-          <Button className="rounded-full w-24">
+          {/* <Button className="rounded-full w-24">
             <Link href="api/auth/signin">Login</Link>
-          </Button>
+          </Button> */}
+          {user ? <UserButton user={user} /> : <SignInButton />}
+          <MobileNav/>
         </div>
       </div>
     </header>
   );
 };
+
+    function SignInButton(){
+      return(
+        <form action={async () =>{
+          'use server'
+          await signIn()
+        }}>
+          <Button className="rounded-full w-24" type='submit'>Sign in</Button>
+        </form>
+      )
+    }
 
 export default Header;
